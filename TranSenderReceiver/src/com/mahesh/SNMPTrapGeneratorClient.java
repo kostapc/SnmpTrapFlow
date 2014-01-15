@@ -1,5 +1,6 @@
 package com.mahesh;
 
+import org.c0f3.snmp.TrapPacket;
 import org.snmp4j.CommandResponder;
 import org.snmp4j.CommandResponderEvent;
 import org.snmp4j.CommunityTarget;
@@ -27,6 +28,8 @@ import org.snmp4j.smi.UdpAddress;
 import org.snmp4j.smi.VariableBinding;
 import org.snmp4j.transport.DefaultUdpTransportMapping;
 
+import java.io.IOException;
+
 /**
  * @author mchopker
  *
@@ -34,13 +37,13 @@ import org.snmp4j.transport.DefaultUdpTransportMapping;
 public class SNMPTrapGeneratorClient {
 
 	private static final String community = "public";
-	private static final String trapOid = ".1.3.6.1.2.1.1.6";
+	private static final String  trapOid = ".1.3.6.1.2.1.1.6";
 	private static final String ipAddress = "127.0.0.1";
 	private static final int port = 162;
 
 	public static void main(String args[]) {
-		sendSnmpV1Trap();
-		sendSnmpV2Trap();
+		//sendSnmpV1Trap();
+		//sendSnmpV2Trap();
 		sendSnmpV3Trap();
 	}
 
