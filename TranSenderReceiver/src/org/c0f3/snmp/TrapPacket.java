@@ -1,5 +1,6 @@
 package org.c0f3.snmp;
 
+import org.snmp4j.CommandResponderEvent;
 import org.snmp4j.PDU;
 import org.snmp4j.PDUv1;
 import org.snmp4j.ScopedPDU;
@@ -23,6 +24,15 @@ public class TrapPacket {
     private int version;
     private String trapOid;
     private PDU pdu;
+    private String address;
+
+
+    public TrapPacket(CommandResponderEvent event) {
+        address = event.getPeerAddress().toString();
+        pdu = event.getPDU();
+        trapOid = getOIDString(pdu);
+        //version = event.getSecurityLevel(); // ???????? where is version?
+    }
 
     /**
      * Constructor used for generating new packets
@@ -30,6 +40,7 @@ public class TrapPacket {
      * @throws SNMPFlowException
      */
     public TrapPacket(int trapPacketVersion, String inTrapOid) throws SNMPFlowException {
+        address = defaultAdress;
         trapOid = inTrapOid;
         version = trapPacketVersion;
         switch (trapPacketVersion) {
@@ -72,11 +83,13 @@ public class TrapPacket {
         }
     }
 
+
+
     public void addVariable(OID variableOID, String data) throws SNMPFlowException {
         try {
             pdu.add(new VariableBinding(variableOID, data));
         } catch (ParseException e) {
-            throw new SNMPFlowException(e.getMessage());
+            throw new SNMPFlowException(e);
         }
     }
 
@@ -93,8 +106,12 @@ public class TrapPacket {
         return pdu;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
     public String getOID() {
-        return getOIDString(pdu);
+        return trapOid;
     }
 
     private static long getJVMUpTime() {

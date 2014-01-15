@@ -44,6 +44,7 @@ public class SNMPTrapReceiver implements CommandResponder {
 
 	public static void main(String[] args) {
 		new SNMPTrapReceiver().run();
+        System.out.println("main is ended");
 	}
 
 	private void run() {
@@ -87,6 +88,7 @@ public class SNMPTrapReceiver implements CommandResponder {
 				new UsmUser(new OctetString("MD5DES"), null, null, null, null));
 
 		snmp.listen();
+        System.out.println("init is ended");
 	}
 
     // overriding CommandResponder, part of SNMP4j
