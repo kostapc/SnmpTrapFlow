@@ -28,7 +28,12 @@ public class TrapPacket {
 
 
     public TrapPacket(CommandResponderEvent event) {
-        address = event.getPeerAddress().toString();
+        Address snmpAddress = event.getPeerAddress();
+        if(snmpAddress instanceof IpAddress) {
+            address = ((IpAddress) snmpAddress).getInetAddress().getHostAddress();
+        } else {
+            address = snmpAddress.toString();
+        }
         pdu = event.getPDU();
         trapOid = getOIDString(pdu);
         //version = event.getSecurityLevel(); // ???????? where is version?
@@ -79,7 +84,7 @@ public class TrapPacket {
                 pdu = spdu;
             break;*/
             default:
-                throw new SNMPFlowException("invalid version of SNMP");
+                throw new IllegalArgumentException("invalid version of SNMP");
         }
     }
 

@@ -21,16 +21,16 @@ import java.io.IOException;
  */
 public class SNMPFlowListener {
     private static final int DEFAULT_THREAD_POOL_SIZE = 10;
+    public static final String DEFAULT_ADDRESS = "0.0.0.0";
     public static final int DEFAULT_PORT = 162;
     public static final String PROTO_UDP = "udp";
     public static final String PROTO_TCP = "tcp";
 
-    private Snmp snmp = null;
-    private Address listenAddress;
-
     private static ThreadPool threadPool = null;
     private static MultiThreadedMessageDispatcher dispatcher;
     private static USM usm;
+
+    private static SNMPFlowListener instance;
 
     private static void init() {
         threadPool = ThreadPool.create("Trap listener pool", DEFAULT_THREAD_POOL_SIZE);
@@ -52,7 +52,16 @@ public class SNMPFlowListener {
         dispatcher.addMessageProcessingModel(new MPv3(usm));
     }
 
-    private static SNMPFlowListener instance;
+    private Snmp snmp = null;
+    private Address listenAddress;
+
+    public static synchronized SNMPFlowListener getSNMPFlowListener() throws SNMPFlowException {
+        return getSNMPFlowListener(
+                PROTO_UDP,
+                DEFAULT_ADDRESS,
+                DEFAULT_PORT
+        );
+    }
 
     public static synchronized SNMPFlowListener getSNMPFlowListener(String proto, String address, int port)
             throws SNMPFlowException {
@@ -116,7 +125,7 @@ public class SNMPFlowListener {
     }
 
 
-
-
-
+    public String getAddress() {
+        return listenAddress.toString();
+    }
 }

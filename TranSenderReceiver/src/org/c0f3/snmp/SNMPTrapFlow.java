@@ -3,6 +3,7 @@ package org.c0f3.snmp;
 import org.snmp4j.CommunityTarget;
 import org.snmp4j.Snmp;
 import org.snmp4j.TransportMapping;
+import org.snmp4j.event.ResponseEvent;
 import org.snmp4j.smi.OctetString;
 import org.snmp4j.smi.UdpAddress;
 import org.snmp4j.transport.DefaultUdpTransportMapping;
@@ -19,14 +20,17 @@ public class SNMPTrapFlow implements Runnable {
         long pause = Long.parseLong(argc[0]);
         int  threads = Integer.parseInt(argc[1]);
         String oid = argc[2];
+        if(argc.length>3) {
+            ipAddress = argc[3];
+        }
         while (threads-->0) {
             new SNMPTrapFlow(oid, pause).start();
         }
     }
 
     private static final String community = "public";
-    private static final String ipAddress = "127.0.0.1";
     private static final int port = 162;
+    private static String ipAddress = "127.0.0.1";
 
     private long pause;
     private String oid;
@@ -72,9 +76,10 @@ public class SNMPTrapFlow implements Runnable {
 
             Snmp snmp = new Snmp(transport);
 
-            System.out.println("Sending Trap to " + ipAddress + " on Port " + port);
-
             snmp.send(packet.getPDU(), comtarget);
+
+            System.out.println("Send Trap to " + ipAddress + " on Port " + port);
+
             snmp.close();
         } catch (IOException e) {
             e.printStackTrace();
