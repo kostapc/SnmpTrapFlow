@@ -1,6 +1,5 @@
 package com.mahesh;
 
-import org.c0f3.snmp.TrapPacket;
 import org.snmp4j.CommandResponder;
 import org.snmp4j.CommandResponderEvent;
 import org.snmp4j.CommunityTarget;
@@ -28,32 +27,19 @@ import org.snmp4j.smi.UdpAddress;
 import org.snmp4j.smi.VariableBinding;
 import org.snmp4j.transport.DefaultUdpTransportMapping;
 
-import java.io.IOException;
-
 /**
  * @author mchopker
  *
  */
 public class SNMPTrapGeneratorClient {
 
-	private static final String community = "public";
-	private static final String  trapOid = ".1.3.6.1.2.1.1.6";
-	private static final String ipAddress = "127.0.0.1";
-	private static final int port = 162;
-
-	public static void main(String args[]) {
-		//sendSnmpV1Trap();
-		//sendSnmpV2Trap();
-		sendSnmpV3Trap();
-	}
-
 	/**
 	 * This methods sends the V1 trap
 	 */
-	private static void sendSnmpV1Trap() {
+	public static void sendSnmpV1Trap(String community, String ipAddress, int port, String trapOid) {
 		try {
 			// Create Transport Mapping
-			TransportMapping<?> transport = new DefaultUdpTransportMapping();
+			TransportMapping transport = new DefaultUdpTransportMapping();
 			transport.listen();
 
 			// Create Target
@@ -90,10 +76,10 @@ public class SNMPTrapGeneratorClient {
 	/**
 	 * This methods sends the V2 trap
 	 */
-	private static void sendSnmpV2Trap() {
+	public static void sendSnmpV2Trap(String community, String ipAddress, int port, String trapOid) {
 		try {
 			// Create Transport Mapping
-			TransportMapping<?> transport = new DefaultUdpTransportMapping();
+			TransportMapping transport = new DefaultUdpTransportMapping();
 			transport.listen();
 
 			// Create Target
@@ -137,14 +123,14 @@ public class SNMPTrapGeneratorClient {
 	/**
 	 * Sends the v3 trap
 	 */
-	private static void sendSnmpV3Trap() {
+	public static void sendSnmpV3Trap(String community, String ipAddress, int port, String trapOid) {
 		try {
 			long start = System.currentTimeMillis();
 			Address targetAddress = GenericAddress.parse("udp:" + ipAddress
 					+ "/" + port);
 
 			// Create Transport Mapping
-			TransportMapping<?> transport = new DefaultUdpTransportMapping();
+			TransportMapping transport = new DefaultUdpTransportMapping();
 			Snmp snmp = new Snmp(transport);
 			USM usm = new USM(SecurityProtocols.getInstance(), new OctetString(
 					MPv3.createLocalEngineID()), 0);
@@ -181,8 +167,7 @@ public class SNMPTrapGeneratorClient {
 					new Integer32(1)));
 
 			// Send the PDU
-			System.out.println("Sending V3 Trap to " + ipAddress + " on Port "
-					+ port);
+			System.out.println("Sending V3 Trap to " + ipAddress + " on Port " + port);
 			snmp.send(pdu, target);
 			snmp.addCommandResponder(new CommandResponder() {
 				@Override

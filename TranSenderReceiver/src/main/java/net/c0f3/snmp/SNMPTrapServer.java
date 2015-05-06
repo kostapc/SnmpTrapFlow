@@ -1,4 +1,4 @@
-package org.c0f3.snmp;
+package net.c0f3.snmp;
 
 
 import java.util.logging.Logger;

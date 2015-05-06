@@ -1,9 +1,8 @@
-package org.c0f3.snmp;
+package net.c0f3.snmp;
 
 import org.snmp4j.CommandResponderEvent;
 import org.snmp4j.PDU;
 import org.snmp4j.PDUv1;
-import org.snmp4j.ScopedPDU;
 import org.snmp4j.mp.SnmpConstants;
 import org.snmp4j.smi.*;
 

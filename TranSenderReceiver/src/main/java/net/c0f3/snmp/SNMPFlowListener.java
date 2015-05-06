@@ -1,4 +1,4 @@
-package org.c0f3.snmp;
+package net.c0f3.snmp;
 
 import org.snmp4j.MessageDispatcherImpl;
 import org.snmp4j.Snmp;
@@ -82,7 +82,7 @@ public class SNMPFlowListener {
 
     private SNMPFlowListener(String addressString) throws SNMPFlowException {
         listenAddress = GenericAddress.parse(addressString);
-        TransportMapping<?> transport;
+        TransportMapping transport;
         try {
             if (listenAddress instanceof UdpAddress) {
                 transport = new DefaultUdpTransportMapping((UdpAddress) listenAddress);

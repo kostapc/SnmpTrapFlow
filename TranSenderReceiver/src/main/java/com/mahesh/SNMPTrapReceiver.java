@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.Vector;
 
-import org.c0f3.snmp.TrapPacket;
+import net.c0f3.snmp.TrapPacket;
 import org.snmp4j.*;
 import org.snmp4j.mp.MPv1;
 import org.snmp4j.mp.MPv2c;
@@ -39,15 +39,8 @@ public class SNMPTrapReceiver implements CommandResponder {
 	private int n = 0;
 	private long start = -1;
 
-	public SNMPTrapReceiver() {
-	}
 
-	public static void main(String[] args) {
-		new SNMPTrapReceiver().run();
-        System.out.println("main is ended");
-	}
-
-	private void run() {
+	public void run() {
 		try {
 			init();
 			snmp.addCommandResponder(this);
@@ -56,13 +49,13 @@ public class SNMPTrapReceiver implements CommandResponder {
 		}
 	}
 
-	private void init() throws UnknownHostException, IOException {
+	private void init() throws IOException {
 		threadPool = ThreadPool.create("Trap", 10);
 		dispatcher = new MultiThreadedMessageDispatcher(threadPool,
 				new MessageDispatcherImpl());
 		listenAddress = GenericAddress.parse(System.getProperty(
 				"snmp4j.listenAddress", "udp:0.0.0.0/162"));
-		TransportMapping<?> transport;
+		TransportMapping transport;
 		if (listenAddress instanceof UdpAddress) {
 			transport = new DefaultUdpTransportMapping(
 					(UdpAddress) listenAddress);

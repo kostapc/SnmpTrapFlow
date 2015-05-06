@@ -1,4 +1,4 @@
-package org.c0f3.snmp;
+package net.c0f3.snmp;
 
 import org.snmp4j.CommunityTarget;
 import org.snmp4j.Snmp;
@@ -63,7 +63,7 @@ public class SNMPTrapFlow implements Runnable {
     }
 
     private static void sendSnmpTrap(TrapPacket packet) {
-        TransportMapping<?> transport = null;
+        TransportMapping transport = null;
         try {
             transport = new DefaultUdpTransportMapping();
             // Create Target
